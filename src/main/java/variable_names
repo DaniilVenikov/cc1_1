@@ -1,0 +1,35 @@
+fieldName - nameFieldFailedValidation
+// название поля, которое не прошло валидацию
+
+data - userMessageData
+// данные из сообщения пользователя
+
+comments - taskStatusComments
+// комментарии по статусу задачи
+
+files - archiveFiles
+// архивные файлы
+
+stats - mailingsDailyStatistics
+// ежедневная статистика по рассылкам
+
+params - paramsForDatabaseQuery
+// параметры для формирования запроса к базе данных
+
+msgAmount - notValidatedMessageAmount
+// количество сообщений не прошедших валидацию
+
+index - symbolIndexByColorValue
+// индекс символа в массиве соответствующий значению цвета
+
+input - inputDoctorSpecialization
+// результат ввода специализации доктора
+
+doctors - listDoctorsBySpecialization
+// список докторов по специалиазации
+
+balance - currentUserBalance
+// текущий баланс пользователя
+
+timeStamp - orderDateTimeStamp
+// переменная, хранящая дату и время заказа в виде метки времени
