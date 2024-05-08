@@ -1,0 +1,58 @@
+6.1
+Вместо userInput использовать searchQuery в контексте поискового запроса пользователя
+Вместо totalAmount использовать libraryCollection в контексте количества книг в библиотеке
+Вместо dataStructure использовать productCatalog в контексте системы управления товарами
+Вместо entity использовать mailing в контексте получения рассылки из репозитория
+Вместо itemList можно использовать shoppingCart в контексте управления корзиной пользователя онлайн магазина
+
+
+6.2
+Можно было бы использовать singletonInstance при названии переменной экземпляра класса,
+класс который представляет сосбой кастомную метрику для Grafana и реализует паттерн Singleton
+
+Было использовано название пересенной: encryptionKey - переменная, содержащая ключ для шифрования данных.
+
+Было использовано название пересенной: databaseConnection - переменная, представляющая соединение с базой данных.
+
+Было использовано название пересенной: httpRequest - переменная, содержащая информацию о HTTP запросе
+
+
+6.3
+// В данном примере допустимо использовать переменные с такими именами, т.к. они образуют данные банковской карты
+// и являются атрибутами класса BankCard
+public class BankCard {
+
+    private String cardNumber;
+
+    private LocalDate dueDate;
+
+    private Integer securityCode;
+}
+
+// В данном контексте имя переменной securityCode могло бы быть неоднозначно,
+// поэтому лучше дать переменной имя - bankCardSecurityCode
+private void paymentByCardNumber(String cardNumber) {
+    int bankCardSecurityCode = cardRepository.getCard(cardNumber).getSecurityCode();
+    pay(cardNumber, bankCardSecurityCode);
+}
+
+// Здесь переменная matchingBooks относится к локальной переменной метода "searchByKeyword",
+// и её название указывает на то, что она содержит список книг, соответствующих ключевому слову поиска.
+public List<Book> searchByKeyword(String keyword) {
+    List<Book> matchingBooks = new ArrayList<>();
+    for (Book book : catalog) {
+        if (book.getTitle().contains(keyword)) {
+            matchingBooks.add(book);
+        }
+    }
+    return matchingBooks;
+}
+
+
+6.4
+files - archiveFiles
+stats - mailingsDailyStats
+data - userMessageData
+balance - currentUserBalance
+titles - bookTitleList
+
