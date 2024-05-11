@@ -1,0 +1,145 @@
+7.1
+notValidated - isValidated
+// флаг, указывающий прошло ли письмо валидацию
+
+admin - isUserAdmin
+// флаг, указывающий есть ли у пользователя роль админа
+
+continueProcess - shouldContinueProcess
+// флаг, указывающий стоит ли продолжить процесс обаботки и сохранения вложенных файлов
+
+loaded - isContentLoaded
+// флаг, указывающий был ли успешно загружен весь контент для карточки товара
+
+hasPermission - isPermissionGranted
+// флаг, указывающий достаточно ли у пользователя прав для совершения данного действия
+
+
+7.2
+// в этом фрагменте кода булевая переменная checkCoincidence проверят найдено ли значение в коллекции
+// здесь можно использовать типичное имя булевой переменной - found(определение того, обнаружено ли некоторое значение)
+boolean checkCoincidence = false;
+if(!checkIncorrectExpressions(message)) {
+    if(!message.equals(prevMessage)) {
+        for(HashMap<String, List<String>> iter : allPhrases) {
+            if(iter.get("input").contains(formattingString(message))) {
+                checkCoincidence = true;
+                randomElement = rand.nextInt(iter.get("output").size());
+                sendMessage(chatId, iter.get("output").get(randomElement));
+                prevMessage = message;
+            }
+        }
+
+        if (!checkCoincidence) {
+            sendMessage(chatId, "Не совсем понимаю о чём ты говоришь");
+        }
+    } else {
+        sendMessage(chatId, "Уже отвечал вам на это сообщение");
+    }
+}
+
+// в этом фрагменте кода булевая переменная isException слудит флагом для признака ошибки
+// здесь можно использовать типичное имя булевой переменной - error
+boolean isException = false;
+try {
+    var attachment = fileRepository.getByHash(hash);
+    message.setAttachments(attachment);
+} catch (Exception e) {
+    isException = true;
+    auditEventLogger.log("Файл не найден: " + e.getMessage());
+} finally {
+    if (!isException) {
+        auditEventLogger.log("Файл успешно добвлены к сообщению.");
+    }
+}
+
+
+7.3
+// В данном фрагменте кода представлен метод, который производит слияние двух массивов в один результирующий,
+// содержащий наибольшие значения из двух массивов
+// Индексы в цикле были именованы: firstTeamIndex, secondTeamIndex, topTeamIndex, вместо стандартных i, j, k.
+// Такой выбор имён для индексов в этом случае позволил повысить читаемость кода
+public static int[] merge(int[] team1, int[] team2) {
+    int[] topTeam = new int[10];
+    int firstTeamIndex = 0;
+    int secondTeamIndex = 0;
+    int topTeamIndex = 0;
+
+    while (topTeamIndex < topTeam.length) {
+        if (firstTeamIndex == team1.length) {
+            topTeam[topTeamIndex] = team2[secondTeamIndex];
+            secondTeamIndex++;
+        } else if (secondTeamIndex == team2.length) {
+            topTeam[topTeamIndex] = team1[firstTeamIndex];
+            firstTeamIndex++;
+        } else {
+            if (team1[firstTeamIndex] >= team2[secondTeamIndex]) {
+                topTeam[topTeamIndex] = team1[firstTeamIndex];
+                firstTeamIndex++;
+            } else {
+                topTeam[topTeamIndex] = team2[secondTeamIndex];
+                secondTeamIndex++;
+            }
+        }
+        topTeamIndex++;
+    }
+    return topTeam;
+}
+
+
+7.4
+// В этом фрагменте кода использована пара антониомов sorted - unsorted для обозначения состояния массива до и после сортировки
+int[] unsortedArray = { 5, 2, 8, 1, 9 };
+int[] sortedArray = sortArray(unsortedArray);
+
+// В этом фрагменте кода использована пара антониомов head - tail для обозначения первого и последнего элемента связного списка
+public class LinkedList
+{
+    public Node head;
+    public Node tail;
+}
+
+7.5
+// В этом фрагменте кода представлен метод из реализации класса игрового агента,
+// который помечает соседние клектки как безопасные.
+// метод до
+private void isNoWarning(int x, int y) {
+    if(!(x==0 && y==0)) {
+        for (int[] direction : directions) {
+            int newX = x + direction[0];
+            int newY = y + direction[1];
+            if (isValid(newX, newY)) {
+                playMap.get(newY).get(newX).put("isWarning", false);
+                playMap.get(newY).get(newX).put("isSafe", true);
+            }
+        }
+    }
+}
+
+// метод после исправления
+private void isNoWarning(int currentX, int currentY) {
+    if (!(currentX == 0 && currentY == 0)) {
+        for (int[] direction : directions) {
+            int neighborX = currentX + direction[0];
+            int neighborY = currentY + direction[1];
+            if (isValid(neighborX, neighborY)) {
+                playMap.get(neighborY).get(neighborX).put("isWarning", false);
+                playMap.get(neighborY).get(neighborX).put("isSafe", true);
+            }
+        }
+    }
+}
+
+
+// метод для расчёта хэшкода строки
+public int hashFun(String key) {
+    int sum = 0;
+    for(int i = 0; i < key.length(); i++) {
+        sum += key.charAt(i);
+    }
+
+    return sum % size;
+}
+
+// здесь следует переименовать временную переменную sum в hashCode
+// Имя sum менее описательным, hashCode более точно отражает ее назначение
