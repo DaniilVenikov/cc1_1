@@ -1,0 +1,37 @@
+3.1
+ValidateMailing - MailingValidator
+// класс валидации рассылок
+
+ResourceInfo - ResourceDto
+// класс, хранящий информацию о ресурсе
+
+MessageMapper - MessageDtoToMessageEntityMapper
+// класс, отвечающий за маппинг
+
+GlobalExceptionManager - GlobalExceptionHandler
+// класс, отвечающий за обработку ошибок
+
+TimePeriodProcessor - TimePeriodConstructor
+// класс, отвечающий за построение корректного объекта TimePeriod в зависимости от входных данных
+
+3.2
+fetchUserDetails - getUserDetails
+// название метода получения данных о пользователе
+
+verifyMailingOn - checkMailingOn
+// название метода проверяющего включена ли рассылка
+
+ProductData - ProductDetails
+// объект предоставляющего информацию о продукте
+
+analyzeInputData - parseInputData
+// метод отвечающий за парсинг данных
+
+encryptBodyMessage - encodeBodyMessage
+// метод декодирования тела сообщения
+
+modifyState - updateState
+// метод обновления состояния
+
+ProductDatabase - ProductRepository
+// объект отвечающий за работу с базой данных
