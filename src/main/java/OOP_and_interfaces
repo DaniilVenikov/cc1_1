@@ -1,0 +1,84 @@
+3.1
+1. Класс EmailMessage:
+
+public class EmailMessage {
+    private String from;
+    private String to;
+    private String subject;
+    private String body;
+
+    private EmailMessage(String from, String to, String subject, String body) {
+        this.from = from;
+        this.to = to;
+        this.subject = subject;
+        this.body = body;
+    }
+
+    public static EmailMessage fromUserToAdmin(String userEmail, String subject, String body) {
+        return new EmailMessage(userEmail, "admin@example.com", subject, body);
+    }
+
+    public static EmailMessage fromAdminToUser(String userEmail, String subject, String body) {
+        return new EmailMessage("admin@example.com", userEmail, subject, body);
+    }
+
+    // код класса...
+}
+
+2. Класс Customer:
+
+public class Customer {
+    private String name;
+    private String email;
+    private String phone;
+
+    private Customer(String name, String email, String phone) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public static Customer fromNameAndEmail(String name, String email) {
+        return new Customer(name, email, null);
+    }
+
+    public static Customer fromNameAndPhone(String name, String phone) {
+        return new Customer(name, null, phone);
+    }
+
+    // код класса...
+}
+
+3. Класс Money:
+
+public class Money {
+    private int amount;
+    private String currency;
+
+    private Money(int amount, String currency) {
+        this.amount = amount;
+        this.currency = currency;
+    }
+
+    public static Money fromDollars(int dollars) {
+        return new Money(dollars, "USD");
+    }
+
+    public static Money fromEuros(int euros) {
+        return new Money(euros, "EUR");
+    }
+
+    // код класса...
+}
+
+3.2
+// Обычно интерфейсы используем для описания слоя сервисов.
+// Интерфейс называем обычным именем, а его реализацию называем с добавлением суффикса Impl:
+EventService – EventServiceImpl
+MailingService – MailingServiceImpl
+MassageService – MassageServiceImpl
+
+// Из учебного проекта.
+// Реализация системы фильтрации комментариев на каком-то веб-портале.
+// Решил абстрагировать фильтр в виде интерфейса TextAnalyzer.
+// Его реализации были названы: SpamAnalyzer, NegativeTextAnalyzer и TooLongTextAnalyzer.
