@@ -1,0 +1,127 @@
+Было:
+double size_first_bucket = 0.1;
+double size_second_bucket = 0.2;
+if (size_first_bucket + size_second_bucket == MAX_CAPACITY) {
+    ...
+}
+Стало:
+double size_first_bucket = 0.1;
+double size_second_bucket = 0.2;
+double epsilon = 1e-10;
+if (Math.abs(first_side + second_side - MAX_CAPACITY) < epsilon) {
+    ...
+}
+// вместо прямого сравнения на равенство, использовал сравнение с небольшим допуском, чтобы учесть ошибки округления
+
+Было:
+if ((responseCode != NOT_FOUND && responseCode != UNAUTHORIZED) && (connectionStatus == STATUS_CONNECTED)) {
+    ...
+}
+Стало:
+boolean isNotError = responseCode != NOT_FOUND && responseCode != UNAUTHORIZED;
+boolean isConnected = connectionStatus == STATUS_CONNECTED;
+if (isNotError && isConnected) {
+    ...
+}
+
+
+Было:
+float x = 1.2345f;
+float y = 6.7890f;
+float c = a * b;
+Стало:
+double x = 1.2345;
+double y = 6.7890;
+double c = a * b;
+// вместо использования типа float, использовал тип double, чтобы иметь большую точность при вычислениях
+
+
+Было:
+String language = "en"
+Стало:
+String LANGUAGE_CODE = "en"
+// вместо использования "магической" строки для представления языка,
+// использовал константу, которая делает код более понятным
+
+Было:
+if ((temperature < MIN_TEMP || temperature > MAX_TEMP) && (connectionStatus == STATUS_CONNECTED)) {
+    ...
+}
+Стало:
+boolean isOutOfSafeRangeTemperature = temperature < MIN_TEMP || temperature > MAX_TEMP;
+boolean isWindy == windSpeed > AVERAGE_WIND_SPEED;
+if (isOutOfSafeRangeTemperature || isWindy) {
+    ...
+}
+// вынес условия в логические переменные для упрощения сложного условия
+
+
+Было:
+String defaultLocale = "en_US"
+Стало:
+Locale DEFAULT_LOCALE = Locale.US
+// вместо использования "магической" строки для представления локали,
+// использовал объект Locale, который делает код более понятным и безопасным
+
+
+Было:
+private static final String LOGIN_PAGE_TEMPLATE = "login.%s";
+...
+String loginPage = String.format(LOGIN_PAGE_TEMPLATE, "html");
+Стало:
+String loginPage = String.format("login.%s", "html");
+// В данном примере был случай дырявой абстракции.
+// Это не магическая костанта, поэтому перенёс шаблон строки в место непосредственного использования
+
+
+Было:
+int numOrders = (int) orderCount;
+Стало:
+int numOrders = orderCount.intValue();
+// вместо явного приведения типа использовал метод intValue(), чтобы сделать преобразование более явным и понятным
+
+
+Было:
+if ((status == STATUS_NEW || status == STATUS_IN_PROGRESS) && (age >= MIN_AGE && age <= MAX_AGE)) {
+    ...
+}
+Стало:
+boolean isValidStatus = status == STATUS_NEW || status == STATUS_IN_PROGRESS;
+boolean isEligibleAge = age >= MIN_AGE && age <= MAX_AGE;
+if (isValidStatus && isEligibleAge) {
+    ...
+}
+// вынес условия в логические переменные для упрощения сложного условия
+
+
+Было:
+double averageCostOfGoods = totalCostOfGoods / numberOfGoods;
+Стало:
+try {
+    if (numberOfGoods == 0) throw new ArithmeticException("Division by zero");
+    double averageCostOfGoods = a / b;
+} catch (ArithmeticException e) {
+    ...
+}
+
+Было:
+log.info(LOGIN_MESSAGE_TEMPLATE, username)
+Стало:
+log.info("User %s has logged in.", username)
+// В данном примере был случай дырявой абстракции.
+// Это не магическая костанта, поэтому перенёс шаблон строки в место непосредственного использования
+
+
+Было:
+public static String getUrl(String path) {
+    return "api/v1/credit" + path);
+}
+Стало:
+private static final String ROOT_PATH = "api/v1/credit";
+...
+public static String getDatabaseUrl(String path) {
+    return ROOT_PATH + path;
+}
+// вместо использования "магической" строки для представления главного пути,
+// использовал константу, которая делает код более понятным
+
