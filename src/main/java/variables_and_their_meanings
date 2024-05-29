@@ -1,0 +1,292 @@
+1. Было:
+public class PhoneBook {
+    private Map<String, String> phoneBook;
+    // ...
+}
+Стало:
+public class PhoneBook {
+    private final Map<String, String> phoneBook;
+
+    public PhoneBook(){
+        phoneBook = new HashMap<>();
+    }
+    ...
+}
+// сделал переменную final, так как используется только для хранения значений
+// и проинициализировал поле класса сразу в конструкторе
+
+2. Было:
+public class Rule {
+    private String question;
+    private Map<String, String> answers;
+
+    public Rule(String question) {
+        this.question = question;
+    }
+    ...
+}
+Стало:
+public class Rule {
+    private final String question;
+    private final Map<String, String> answers;
+
+    public Rule(String question) {
+        this.question = question;
+        this.answers = new HashMap<>();
+    }
+    ...
+}
+// сделал переменнst final, так как используются только для хранения значений
+// и проинициализировал поля класса сразу в конструкторе
+
+3. Было:
+public static void main(String[] args) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.create();
+        Scanner scanner = new Scanner(System.in);
+        String host = readConfiguration().getHost();
+        int port = readConfiguration().getPort();
+
+        System.out.println("Введите ваш ник");
+        String nick = scanner.nextLine();
+        System.out.println("Идёт подключение к чату (для выхода из чата введите \"exit\")");
+
+        try (Socket clientSocket = new Socket(host, port);
+             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
+            MessageSender serverMessageSender = new ServerMessageSender(clientSocket);
+
+            while (true) {
+                System.out.print(nick + ": ");
+                String text = scanner.nextLine();
+
+                MessageDto clientMessage;
+                String jsonMessage;
+
+                if (text.equals("exit")) {
+                    clientMessage = new MessageDto(nick, new Timestamp(System.currentTimeMillis()), "exit");
+
+                    jsonMessage = gson.toJson(clientMessage);
+
+                    serverMessageSender.sendMessage(jsonMessage);
+
+                    String response = in.readLine();
+                    MessageDto responseMessageDto = gson.fromJson(response, MessageDto.class);
+                    System.out.println(responseMessageDto.getMessage());
+                    writeClientInLog(responseMessageDto.getClientNick() + " "
+                            + responseMessageDto.getMessageTimestamp() + " " + responseMessageDto.getMessage());
+                    break;
+                }
+
+                clientMessage = new MessageDto(nick, new Timestamp(System.currentTimeMillis()), text);
+                jsonMessage = gson.toJson(clientMessage);
+                serverMessageSender.sendMessage(jsonMessage);
+
+                String receivedMessage = in.readLine();
+                MessageDto messageDto = gson.fromJson(receivedMessage, MessageDto.class);
+                String textReceivedMessage = messageDto.getClientNick() + " " +
+                        messageDto.getMessageTimestamp() + ": " + messageDto.getMessage();
+
+                //System.out.println(textReceivedMessage);
+                writeClientInLog(textReceivedMessage);
+
+
+            }
+        } catch (IOException e) {
+            System.out.println("Ошибка на стороне клиента");
+            e.printStackTrace();
+        }
+    }
+Стало:
+public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String host = readConfiguration().getHost();
+        int port = readConfiguration().getPort();
+
+        System.out.println("Введите ваш ник");
+        String nick = scanner.nextLine();
+        System.out.println("Идёт подключение к чату (для выхода из чата введите \"exit\")");
+
+        try (Socket clientSocket = new Socket(host, port);
+             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
+            MessageSender serverMessageSender = new ServerMessageSender(clientSocket);
+
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            Gson gson = gsonBuilder.create();
+            while (true) {
+                System.out.print(nick + ": ");
+                String text = scanner.nextLine();
+
+                MessageDto clientMessage;
+                String jsonMessage;
+
+                if (text.equals("exit")) {
+                    clientMessage = new MessageDto(nick, new Timestamp(System.currentTimeMillis()), "exit");
+
+                    jsonMessage = gson.toJson(clientMessage);
+
+                    serverMessageSender.sendMessage(jsonMessage);
+
+                    String response = in.readLine();
+                    MessageDto responseMessageDto = gson.fromJson(response, MessageDto.class);
+                    System.out.println(responseMessageDto.getMessage());
+                    writeClientInLog(responseMessageDto.getClientNick() + " "
+                            + responseMessageDto.getMessageTimestamp() + " " + responseMessageDto.getMessage());
+                    break;
+                }
+
+                clientMessage = new MessageDto(nick, new Timestamp(System.currentTimeMillis()), text);
+                jsonMessage = gson.toJson(clientMessage);
+                serverMessageSender.sendMessage(jsonMessage);
+
+                String receivedMessage = in.readLine();
+                MessageDto messageDto = gson.fromJson(receivedMessage, MessageDto.class);
+                String textReceivedMessage = messageDto.getClientNick() + " " +
+                        messageDto.getMessageTimestamp() + ": " + messageDto.getMessage();
+
+                //System.out.println(textReceivedMessage);
+                writeClientInLog(textReceivedMessage);
+
+
+            }
+        } catch (IOException e) {
+            System.out.println("Ошибка на стороне клиента");
+            e.printStackTrace();
+        }
+    }
+// переменная gson инициализировалась далеко от её использования
+// перенёс объявления переменной gson как можно ближе к её непосредственному использованию
+// далее, чтобы не вставлять весь большой кусок кода буду прибегать к сокращению: ... // много кода
+
+
+4. Было:
+int size;
+... // много кода
+size = 10;
+Стало:
+... // много кода
+int size = 10;
+// переменная была объявлена, но её инициализация происиходила дальше
+// сделал инициализацию переменной при объявлении
+
+
+5. Было:
+int MAX_SIZE = 120;
+Стало:
+final int MAX_SIZE = 120;
+// использовал final для неизменяемой константы
+
+
+6. Было:
+int result;
+// много кода
+resultSum = calculate(payment, rate);
+Стало:
+... // много кода
+int resultSum = calculate(payment, rate);
+// перенёс объявление и инициализацию переменной непосредственно перед использованием
+
+
+7. Было:
+int speed = 25;
+int distance = 0;
+... // много кода
+distance = speed * work_hours;
+Стало:
+... // много кода
+double hourlyRate = 25;
+double amount perDay = hourlyRate * workHours;
+// вместо повторного присваивания изменил на вычисление значения при первом использовании
+
+
+8. Было:
+int temperature;
+... // много кода
+temperature = sensor.getTemperature();
+Стало:
+... // много кода
+int temperature = sensor.getTemperature();
+// переменная была объявлена, но её инициализация происиходила дальше
+// сделал инициализацию переменной непосредственно перед использованием
+
+
+9. Было:
+int sum;
+for (int num : numbers) {
+    sum += num;
+}
+Стало:
+int sum = 0;
+for (int num : numbers) {
+    sum += num;
+}
+// добавил инициализацию аккумулятора перед циклом
+
+
+10. Было:
+int k;
+for (k = 0; k < 20; k += 2) {
+    ...
+}
+Стало:
+for (int k = 0; k < 20; k += 2) {
+    ...
+}
+// изменил нициализацию переменной-счетчика непосредственно в заголовке цикла for
+
+
+11. Было:
+int speed = 120;
+for (int i = 0; i < city.length; i++) {
+     // использование speed
+}
+Стало:
+int speed = 120;
+for (int i = 0; i < city.length; i++) {
+     // использование speed
+}
+speed = -1;
+// завершив работу с переменнной speed, сделал присваивание "недопустимого" значения
+
+
+12. Было:
+List<String> products = new ArrayList<>();
+// использование products
+Стало:
+List<String> products = new ArrayList<>();
+// использование list
+products = null;
+// завершив работу с переменнной products, сделал присваивание "недопустимого" значения
+
+
+13. Было:
+String message = "Product: ";
+// использование message
+Стало:
+String message = "Product: ";
+// использование message
+message = "***ERROR***";
+// завершив работу с переменнной message, сделал присваивание "недопустимого" значения
+
+14. Было:
+public void setAddress(String address) {
+        this.address = address;
+}
+Стало:
+public void setAddress(String address) {
+        assert address != null && !address.isEmpty() : "Address cannot be null or empty";
+        this.address = address;
+}
+// включил в метод утверждение для проверки переменной на предмет допустимости значений
+
+15. Было:
+public sentEmail(User from, User to, Email email) {
+    // логика отправки сообщения
+}
+Стало:
+public sentEmail(User from, User to, Email email) {
+    if (from == null || to == null) {
+       throw new IllegalUserArgument("Sender or recipient should not be null");
+    }
+    // логика отправки сообщения
+}
+// включил в метод проверку переменных на предмет допустимости значений
