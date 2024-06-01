@@ -1,0 +1,372 @@
+1. Было:
+public class ClientConnectionHandler implements Runnable{
+    private PrintWriter out;
+    ...
+
+    @Override
+    public void run() {
+        // использование out
+    }
+}
+Стало:
+public class ClientConnectionHandler implements Runnable{
+
+    @Override
+    public void run() {
+        PrintWriter out;
+        // использование out
+    }
+}
+// изменил область видимости переменной с уровня класса на уровень метода
+
+
+2. Было:
+public class ClientConnectionHandler implements Runnable{
+    MessageSender messageSender;
+    ...
+
+    public ClientConnectionHandler(Socket clientSocket, MessageSender messageSender) {
+            this.clientSocket = clientSocket;
+            this.messageSender = messageSender;
+    }
+}
+Стало:
+public class ClientConnectionHandler implements Runnable{
+    private MessageSender messageSender;
+    ...
+
+    public ClientConnectionHandler(Socket clientSocket, MessageSender messageSender) {
+            this.clientSocket = clientSocket;
+            this.messageSender = messageSender;
+    }
+}
+// изменил область видимости переменной с уроня пакета на уровень класса
+
+
+3. Было:
+public static int calculatingShoppingCartTotal(Product[] products) {
+        int sum = 0;
+        ...
+        for (int i = 0; i < products.length; i++) {
+            sum += products[i].price;
+            ...
+        }
+        ...
+}
+Стало:
+public static int calculatingShoppingCartTotal(Product[] products) {
+        ...
+        for (int i = 0, sum = 0; i < products.length; i++) {
+            sum += products[i].price;
+            ...
+        }
+        ...
+}
+// изменил область видимости переменной с уроня метода на уровень цикла
+
+4.Было:
+public class Library {
+    private List<String> bookTitles = new ArrayList<>();
+
+    public void addItem(String title) {
+        bookTitles.add(title);
+    }
+}
+
+Стало:
+public class Library {
+    private final List<String> bookTitles = new ArrayList<>();
+
+    public void addItem(String title) {
+        bookTitles.add(title);
+    }
+}
+// сделал переменную bookTitles final и возвращаем неизменяемый список
+
+
+5. Было:
+public class FileSystemServerConfigurator implements ServerConfigurator{
+     public PathBuilder pathBuilder
+     ...
+}
+Стало:
+public class FileSystemServerConfigurator implements ServerConfigurator{
+     private PathBuilder pathBuilder
+     ...
+}
+// нет необходимсоти, чтобы переменная имела доступ для всех, поэтомуищменил облатсь видимости в пределах класса
+
+
+6. Было:
+String longestName = "";
+for (String name : names) {
+    if (name.length() > longestName.length()) {
+        longestName = name;
+    }
+    ...
+}
+Стало:
+for (String name : names) {
+    String longestName = "";
+    if (name.length() > longestName.length()) {
+        longestName = name;
+    }
+    ..
+}
+// изменил код, чтобы можно было поменять область видимости переменной
+// с уроня метода на уровень цикла
+
+
+7. Было:
+public void calculateStatistics() {
+    int count = 0;
+    double sum = 0.0;
+    for (double value : values) {
+        sum += value;
+        count++;
+    }
+    double average = sum / count;
+    System.out.println("Average: " + average);
+}
+Стало:
+public void calculateStatistics() {
+    double average = computeAverage(values);
+    printAverage(average);
+}
+
+private double computeAverage(double[] values) {
+    int count = 0;
+    double sum = 0.0;
+    for (double value : values) {
+        sum += value;
+        count++;
+    }
+    return sum / count;
+}
+
+private void printAverage(double average) {
+    System.out.println("Average: " + average);
+}
+// вынос вычисления среднего и вывода значения в отдельные методы, что уменьшает время жизни переменных count и sum
+
+
+8. Было:
+...
+int total = 0;
+for (int num : numbers) {
+    total += num;
+}
+// использование total
+Стало:
+for (int num : numbers) {
+    int total = 0;
+    total += num;
+    ...
+}
+// изменил код, чтобы можно было поменять область видимости переменной
+// с уроня метода на уровень цикла
+
+9. Было:
+public class BasketImpl implements Basket {
+    private List<Product> products = new ArrayList<>();
+    ...
+}
+Стало:
+public class BasketImpl implements Basket {
+    private final List<Product> products = new ArrayList<>();
+    ...
+}
+// сделал переменную products final и возвращаем неизменяемый список
+
+
+10. Было:
+public class Product {
+    TypeProduct typeProduct;
+    ...
+}
+Стало:
+public class Product {
+    private TypeProduct typeProduct;
+    ...
+    public TypeProduct getTypeProduct() {
+            return typeProduct;
+    }
+}
+// изменил область видимости переменной с уроня пакета на уровень класса
+
+
+11. Было:
+public void updateStatus() {
+    String accountStatus = getStatus();
+    ...
+    if (accountStatus.equals("active")) {
+        sendNotification();
+    }
+    ...
+}
+Стало:
+public void updateStatus() {
+    String accountStatus = getStatus();
+    handleStatus(accountStatus);
+    ...
+}
+
+private void handleStatus(String status) {
+    if (status.equals("active")) {
+        sendNotification();
+    }
+}
+// группировка связанного кода в метод handleStatus, для сокращения времени жизни переменной accountStatus
+
+
+12. Было:
+public class Order {
+    private int totalWeight;
+
+    public void calculateTotalWeight(int[] orders) {
+        totalWeight = 0;
+        for (int order : orders) {
+            totalWeight += order.weight();
+        }
+    }
+}
+Стало:
+public class Order {
+
+    public int calculateTotalWeight(int[] orders) {
+        totalWeight = 0;
+        for (int order : orders) {
+            totalWeight += order.weight();
+        }
+        ....
+    }
+}
+// переместил переменную totalWeight в область видимости внутри метода
+
+
+13. Было:
+public void saveRejectedMessage(ConstraintViolationException ex, String mailingKey, List<MessageData> messages) {
+        List<MessageDto> messageDtoList = messageRequestDataV2ToMessageDtoMapper.map(messages);
+        MessageDto messageDto = messageDtoList.get(0); //as there's only one obj in list
+
+        String errorMessage = "";
+        String fieldName = "";
+
+        if (ex.getConstraintViolations() != null) {
+            for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+                 fieldName = violation.getPropertyPath().toString();
+                 errorMessage = violation.getMessage();
+
+            }
+        }
+
+        saveRejectedMessage(messageDto, mailingKey, "Field not validated: %s. Error: %s".formatted(extractFieldName(fieldName), errorMessage));
+}
+
+Стало:
+public void saveRejectedMessage(ConstraintViolationException ex, String mailingKey, List<MessageData> messages) {
+        List<MessageDto> messageDtoList = messageRequestDataV2ToMessageDtoMapper.map(messages);
+        MessageDto messageDto = messageDtoList.get(0); //as there's only one obj in list
+
+        saveRejectedMessage(messageDto, mailingKey, getExceptionMessage(ex));
+
+        log.info("Message with uuid %s failed field validation".formatted(messageDto.uuid()));
+        log.info("Message rejected");
+}
+
+
+private String getExceptionMessage(ConstraintViolationException ex) {
+        String errorMessage = "";
+        String fieldName = "";
+
+        if (ex.getConstraintViolations() != null) {
+            for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+                fieldName = violation.getPropertyPath().toString();
+                errorMessage = violation.getMessage();
+
+            }
+        }
+
+        return "Field not validated: %s. Error: %s".formatted(extractFieldName(fieldName), errorMessage);
+}
+// вынес группу связанных команд в отдельный метод
+
+
+14. Было:
+public boolean validate(@NonNull MailingDto mailing, @NonNull Message messages) {
+        boolean isOversize = false;
+        if (!CollectionUtils.isEmpty(message.attachments())){
+            if (message.attachments().size() > mailing.maxFileQuantity()) {
+                auditEventLogger.log(INTERNAL_SERVICES_LOGIN, THRESHOLD_EXCEEDED,
+                        "Для сообщения %s в рассылке %s превышен лимит на количество вложений".formatted(message.uuid(), mailing.key()));
+                isOversize = true;
+            }
+
+            if (totalSize > maxTotalSize * ENCODE_MULTIPLIER) {
+                auditEventLogger.log(INTERNAL_SERVICES_LOGIN, THRESHOLD_EXCEEDED,
+                        "Для сообщения %s в рассылке %s превышен лимит на количество вложений".formatted(messageUuid, mailingKey));
+                isOversize = true;
+            }
+        }
+        return isOversize;
+    }
+
+Стало:
+public boolean validate(@NonNull MailingDto mailing, @NonNull Message messages) {
+        boolean isOversize = false;
+        if (!CollectionUtils.isEmpty(message.attachments()) &&
+                (checkCountAttachmentsForMailingLimit(mailing, message) || validateSizeAttachments(mailing, message)))
+        {
+            isOversize = true;
+        }
+        return isOversize;
+}
+
+private boolean checkCountAttachmentsForMailingLimit(MailingDto mailing, MessageDto message) {
+        boolean isOversize = false;
+        if (message.attachments().size() > mailing.maxFileQuantity()) {
+            auditEventLogger.log(INTERNAL_SERVICES_LOGIN, THRESHOLD_EXCEEDED,
+                    "Для сообщения %s в рассылке %s превышен лимит на количество вложений".formatted(message.uuid(), mailing.key()));
+            isOversize = true;
+        }
+        return isOversize;
+}
+
+
+private boolean checkMessageLimitsTotalSize(int totalSize, int maxTotalSize, String messageUuid, String mailingKey) {
+        boolean isOversize = false;
+        if (totalSize > maxTotalSize * ENCODE_MULTIPLIER) {
+            auditEventLogger.log(INTERNAL_SERVICES_LOGIN, THRESHOLD_EXCEEDED,
+                    "Для сообщения %s в рассылке %s превышен лимит на количество вложений".formatted(messageUuid, mailingKey));
+            isOversize = true;
+        }
+        return isOversize;
+}
+// группировка связанного кода в методы checkCountAttachmentsForMailingLimit и checkMessageLimitsTotalSize
+// для сокращения времени жизни переменной isOversize
+
+
+15. Было:
+public void handleRequest() {
+    String response = fetchResponse();
+    ...
+    if (!response.isEmpty()) {
+        // работа с response
+    }
+    ...
+}
+
+Стало:
+public void handleRequest() {
+    String response = fetchResponse();
+    processResponse(response);
+    ....
+}
+
+private void processResponse(String response) {
+    if (!response.isEmpty()) {
+        // работа с response
+        ...
+    }
+}
+// группировка связанного кода в метод для сокращения времени жизни переменной response
