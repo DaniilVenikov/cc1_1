@@ -1,0 +1,108 @@
+1. Пример максимально раннего связывания, во время написания кода
+// Программа по созданию игрового агента, который должен найти золото на карте
+// Приведен кусочек кода создания игрового поля
+public static void main(String[] args) {
+        int N = 4; // количество строк
+        int M = 4; // количество столбцов
+        int K = 3; // количество ловушек
+
+        List<List<Map<String, Boolean>>> playMap = new ArrayList<>();
+
+        // Создаём пустое игровое поле
+        for (int i = 0; i < N; i++) {
+            List<Map<String, Boolean>> row = new ArrayList<>();
+            for (int j = 0; j < M; j++) {
+                Map<String, Boolean> cell = new HashMap<>();
+                cell.put("trap", false);
+                cell.put("gold", false);
+                cell.put("danger", false);
+                cell.put("visited", false);
+                cell.put("isWarning", false);
+                cell.put("isSafe", false);
+                row.add(cell);
+            }
+            playMap.add(row);
+        }
+
+        Random random = new Random();
+
+        // Генерируем случайные координаты для ловушек
+        List<int[]> trapElems = new ArrayList<>();
+        for (int k = 0; k < K; k++) {
+            int[] trap = new int[]{random.nextInt(N), random.nextInt(M)};
+            trapElems.add(trap);
+        }
+
+        ...
+}
+// Здесь количество строк, столбцов и ловушек задаётся с помощью раннего связывания
+// Это плохой пример кода, который надо исправить, сделав эти значения вводимыми пользователем
+// Реализовано такое связывание было, чтобы ускорить процесс разработки и ввиду того,
+// что эти значения используются только в одном классе, поэтому можно быстро вручную изменить их значения
+
+2. Пример связывания во время компиляции
+// Класс ApiV1 у которого есть константа ROOT_PATH, хранящая корневой путь для всех контроллеров данного микросервиса
+public final class ApiV1 {
+    public static final String ROOT_PATH = "/api/v1/service";
+    ...
+}
+
+// Теперь эту константу можно использовать во всех контроллерах, добавляя только конкретный для этого контроллера эндпоинт
+@RequestMapping(ConfigsApiV1.ROOT_PATH)
+public interface ConfigsApiV1 {
+    String ROOT_PATH = ApiV1.ROOT_PATH + "/endpoint";
+    ...
+}
+
+// В данном случае такой выбор был сделан из-за гибкости, которую даёт использование константы.
+// Если корневой адрес поменяется(например, измениться версия api c v1 на v2), нам не прийдётся переписывать путь
+// во всех контроллерах, а только в одном месте. При этом изменение корневого адреса происходит редко,
+// поэтому нас в полне устраивает, что когда-то нам надо будет перезапустить сервис для обновления переменной.
+
+
+3. Пример связывания во время выполнения программы
+
+// Есть класс, который выполняет функцию считывания параметров для подключения к бд
+class DatabaseConnector {
+    private String dbUrl;
+    private String user;
+    private String password;
+
+    public DatabaseConnector() {
+        loadDbConfig();
+    }
+
+    private void loadDbConfig() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("dbconfig.txt"))) {
+            this.dbUrl = reader.readLine();
+            this.user = reader.readLine();
+            this.password = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            this.dbUrl = "jdbc:mysql://localhost:3306/default";
+            this.user = "root";
+            this.password = "password";
+        }
+    }
+
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(dbUrl, user, password);
+    }
+}
+
+// есть метод, который подключается и работает с бд
+public void updateUser(UpdateUserData updateUserData) {
+    DatabaseConnector dbConnector = new DatabaseConnector();
+
+    try (Connection connection = dbConnector.getConnection()) {
+        if (connection != null) {
+            ...
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+// В данном примере выбор времени связывания параметров подключения при создании объекта DatabaseConnector оправдан,
+// так как параметры подключения, не будут часто меняться. Следовательно, не будет проседать производительность,
+// и одновременно это даёт нам возможность динамечски изменять параметры подключения, без перезапуска программы,
+// что повышает гибкость системы
