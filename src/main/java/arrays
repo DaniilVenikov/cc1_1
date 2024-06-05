@@ -1,0 +1,66 @@
+1. Было:
+private final int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+...
+
+for (int i = 0; i < directions.length; i++) {
+     int[] direction = directions[i];
+     ...
+}
+Стало:
+for (int[] direction : directions) {
+     ..
+}
+// изменил код так, что работа с самим массивом выполнялась без прямой индексации
+
+
+2. Было:
+Order[] orders;
+...
+for (int i = 0; i < orders.length; i++) {
+    handlingOrder(orders[i]);
+    ...
+}
+Стало:
+Queue<Order> orders = new LinkedList<>();
+...
+while (!printQueue.isEmpty()) {
+       Order order = orders.poll();
+       handlingOrder(order);
+       ...
+}
+// вместо использования массива для обработки заказов можно использовать очередь
+
+
+3. Было:
+String[] ruleName = new String[20];
+Rule[] rule = new int[20];
+...
+Стало:
+private Map<String, Rule> rules;
+...
+// вместо использования двух массивов, которые составляли пару ключ-значение для правил в реализации экспертной системы
+// можно использовать словарь
+
+
+4. Было:
+BankCard[] wallet = new BankCard[5];
+...
+Стало:
+Set<BankCard> wallet = new HashSet<>();
+// вместо использования массива для хранения банковских карт юзера можно использовать множество
+
+
+5. Было:
+Report[] reports = new Report[10];
+...
+for(int i = reports.length - 1; i >= 0; i--) {
+    sendReport(reports[i]);
+}
+Стало:
+Stack<Report> reports = new Stack<>();
+...
+for (int i = stack.size(); i > 0; i--) {
+     sendReport(stack.pop());
+}
+// надо отравить отчёты в порядке от самого свежего к самому старому
+// вместо использования массива можно использовать для этой задачи стек
