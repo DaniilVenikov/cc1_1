@@ -1,0 +1,76 @@
+1.
+// Возвращает объект, содержащий настройки базы данных
+private DatabaseSettings getDatabaseSettings() {
+    ...
+};
+// правка была сделана по пукнту 1. Информативные комментарии
+
+2.
+// Запускаем фоновый поток для обновления кэша
+private void startCacheUpdateThread(){
+    ...
+};
+// правка была сделана по пукнту 2.Представление намерений:
+
+3.
+// Метод parseAmount() принимает строку в формате денежной суммы (например, "$123.45") и возвращает BigDecimal
+public BigDecimal parseAmount(String amountString);
+// правка была сделана по пункту 3. Прояснение
+
+4.
+// Осторожно! Этот метод блокирует UI-поток, не используйте его в основном потоке
+private void performSlowOperation(int input){
+   ...
+};
+// правка была сделана по пункту 4. Предупреждения о последствиях
+
+5.
+// Необходимо обработать null-значения, чтобы избежать NullPointerException
+String formattedName = (name != null) ? name : "Unknown";
+// правка была сделана по пункту 5. Усиление
+
+6.
+// TODO Добавить обработку ошибок в этот метод
+private void processData(data){
+    ...
+};
+//  правка была сделана по пункту 6. Комментарии TODO
+
+7.
+// TODO заменить на priorityBaseProducer.producerList
+private void produceMessage(Message message, String priorityKey, ...) {
+    ...
+};
+//  правка была сделана по пункту 6. Комментарии TODO
+
+8.
+// Предупреждение: метод использует устаревший API, который будет удален в следующей версии
+public int getWeatherData(String city) {
+     ...
+};
+// правка была сделана по пункту 4. Предупреждения о последствиях
+
+9.
+// Предупреждение: метод не потокобезопасен, не вызывать его из нескольких потоков одновременно
+public void updateSharedResource(Resource resource);
+
+10.
+// Идентификатор сессии, используемый для авторизации пользователя
+String sessionId = request.getHeader("Session-Id");
+// правка была сделана по пункту 3. Прояснение
+
+11.
+// TODO Реализовать кэширование результатов для повышения производительности
+public List<Message> fetchAndHandlingMessage() {
+     ...
+};
+//  правка была сделана по пункту 6. Комментарии TODO
+
+12.
+// Количество секунд, в течение которых действует токен доступа
+long tokenExpirationSeconds = accessToken.getExpirationTimeSeconds();
+// правка была сделана по пункту 3. Прояснение
+
+
+
+
